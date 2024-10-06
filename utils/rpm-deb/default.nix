@@ -71,7 +71,7 @@ let
     '';
   };
 in { 
-  buildFakeSingleRPM = pkg: stdenv.mkDerivation {
+  buildFakeSingleRPM = pkg: version: stdenv.mkDerivation {
     name = "rpm-single-${pkg.name}";
     buildInputs = [ fpm rpm ];
 
@@ -90,7 +90,7 @@ in {
 
       chmod -R a+rwx ./nix
       chmod -R a+rwx ./bin
-      fpm -s dir -t rpm --name ${pkg.name} nix bin
+      fpm -s dir -t rpm --name ${pkg.name} -v ${version} nix bin
     '';
 
     installPhase = ''
@@ -126,7 +126,7 @@ in {
     '';
   };
 
-  buildFakeSingleDeb = pkg: stdenv.mkDerivation {
+  buildFakeSingleDeb = pkg: version: stdenv.mkDerivation {
     name = "deb-single-${pkg.name}";
     buildInputs = [
       fpm
@@ -147,7 +147,7 @@ in {
 
       chmod -R a+rwx ./nix
       chmod -R a+rwx ./bin
-      fpm -s dir -t deb --name ${pkg.name} nix bin
+      fpm -s dir -t deb --name ${pkg.name} -v ${version} nix bin
     '';
 
     installPhase = ''

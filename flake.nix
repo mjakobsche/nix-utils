@@ -28,14 +28,15 @@
              mkdir -p $out/bin
              ln -s ${program} $out/bin/.
           '';
+          defaultVersion = "1.0";
           utils = system: (pkgs system).callPackage ./utils/rpm-deb {};
              in
     {
-      rpm = { program, system }: 
-          (utils system).buildFakeSingleRPM (package program system);
+      rpm = { program, system, version ? defaultVersion }:
+          (utils system).buildFakeSingleRPM (package program system) version;
 
-      deb = { program, system }: 
-          (utils system).buildFakeSingleDeb (package program system);
+      deb = { program, system, version ? defaultVersion }:
+          (utils system).buildFakeSingleDeb (package program system) version;
 
     };
     defaultBundler = self.bundlers.rpm;
