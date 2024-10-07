@@ -20,10 +20,10 @@
           pkgs = system: import nixpkgs {
             inherit system;
           };
-          # Function requires a derivation along with it's meta data instead
-          # of a built store path provided by `nix bundle`
           derivation = program: parseDrvName (elemAt (split "/" (elemAt (split "/[0-9a-df-np-sv-z]{32}-" (program)) 2)) 0);
           version = derivation: if derivation.version != "" then derivation.version else "1.0";
+          # Function requires a derivation along with it's meta data instead
+          # of a built store path provided by `nix bundle`
           package = program: derivation: system: let
             name = derivation.name;
             in (pkgs system).runCommand name {} ''
@@ -34,11 +34,17 @@
           utils = system: (pkgs system).callPackage ./utils/rpm-deb {};
              in
     {
-      rpm = { program, system }: 
-          (utils system).buildFakeSingleRPM (package program (derivation program) system) (version (derivation program));
+      rpm = { program, system }: let
+        drv = derivation program;
+        pkg = package program drv system;
+        ver = version drv
+      in (utils system).buildFakeSingleRPM pkg ver;
 
-      deb = { program, system }:
-          (utils system).buildFakeSingleDeb (package program (derivation program) system) (version (derivation program));
+      deb = { program, system }: let
+        drv = derivation program;
+        pkg = package program drv system;
+        ver = version drv
+      in (utils system).buildFakeSingleDeb pkg ver;
     };
     defaultBundler = self.bundlers.rpm;
   };
