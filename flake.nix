@@ -38,13 +38,13 @@
       rpm = { program, system }: let
         drv = derivation program;
         pkg = package program drv system;
-        ver = version drv
+        ver = version drv;
       in (utils system).buildFakeSingleRPM pkg ver;
 
       deb = { program, system }: let
         drv = derivation program;
         pkg = package program drv system;
-        ver = version drv
+        ver = version drv;
       in builtins.trace "package: ${pkg}" (utils system).buildFakeSingleDeb pkg ver;
     };
     defaultBundler = self.bundlers.rpm;
