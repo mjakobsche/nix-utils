@@ -74,12 +74,12 @@
       rpm = { program, system }: {
           drv = derivation program;
           (utils system).buildFakeSingleRPM (package drv system) (version drv);
-      }
+      };
 
       deb = { program, system }: {
           drv = derivation program;
-          (utils system).buildFakeSingleDEB (package drv system) (version drv);
-      }
+          (utils system).buildFakeSingleDeb (package drv system) (version drv);
+      };
     };
     defaultBundler = self.bundlers.rpm;
   };
