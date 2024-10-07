@@ -34,15 +34,11 @@
           utils = system: (pkgs system).callPackage ./utils/rpm-deb {};
              in
     {
-      rpm = { program, system }: {
-          drv = derivation program;
-          (utils system).buildFakeSingleRPM (package drv system) (version drv);
-      };
+      rpm = { program, system }: 
+          (utils system).buildFakeSingleRPM (package program (derivation program) system) (version (derivation program));
 
-      deb = { program, system }: {
-          drv = derivation program;
-          (utils system).buildFakeSingleDeb (package drv system) (version drv);
-      };
+      deb = { program, system }:
+          (utils system).buildFakeSingleDeb (package program (derivation program) system) (version (derivation program));
     };
     defaultBundler = self.bundlers.rpm;
   };
