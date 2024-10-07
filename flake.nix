@@ -26,6 +26,7 @@
           # of a built store path provided by `nix bundle`
           package = program: derivation: system: let
             name = derivation.name;
+            version = derivation.version;
             in (pkgs system).runCommand name {} ''
              mkdir -p $out/bin
              ln -s ${program} $out/bin/.
@@ -44,7 +45,7 @@
         drv = derivation program;
         pkg = package program drv system;
         ver = version drv
-      in (utils system).buildFakeSingleDeb pkg ver;
+      in builtins.trace "package: ${pkg}" (utils system).buildFakeSingleDeb pkg ver;
     };
     defaultBundler = self.bundlers.rpm;
   };
