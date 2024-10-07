@@ -22,6 +22,7 @@
           };
           # Function requires a derivation along with it's meta data instead
           # of a built store path provided by `nix bundle`
+          version = program: (parseDrvName ( elemAt (split "/[0-9a-df-np-sv-z]{32}-" (program)) 2)).version;
           package = program: system: let
             name= (parseDrvName ( elemAt (split "/[0-9a-df-np-sv-z]{32}-" (program)) 2)).name;
             in (pkgs system).runCommand name {} ''
@@ -35,7 +36,7 @@
       rpm = { program, system, version ? defaultVersion }:
           (utils system).buildFakeSingleRPM (package program system) version;
 
-      deb = { program, system, version ? defaultVersion }:
+      deb = { program, system, version ? defaultVersion }: builtins.trace "program: ${(toString program)} package: ${(toString (package program system))} version: ${(toString version program)}" 
           (utils system).buildFakeSingleDeb (package program system) version;
 
     };
