@@ -36,7 +36,7 @@
       rpm = { program, system, version ? defaultVersion }:
           (utils system).buildFakeSingleRPM (package program system) version;
 
-      deb = { program, system, version ? defaultVersion }: builtins.trace "program: ${(toString program)} package: ${(toString (package program system))} version: ${(toString version program)}" 
+      deb = { program, system, version ? defaultVersion }: builtins.trace "program: ${(toString program)} package: ${(toString (package program system))} version: ${(toString (version program))}" 
           (utils system).buildFakeSingleDeb (package program system) version;
 
     };
