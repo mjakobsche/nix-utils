@@ -133,7 +133,7 @@ in {
     ];
 
     unpackPhase = "true";
-
+    
     buildPhase = ''
       export HOME=$PWD
       mkdir -p ./nix/store/
@@ -147,6 +147,7 @@ in {
 
       chmod -R a+rwx ./nix
       chmod -R a+rwx ./bin
+      echo "${pkg}"
       fpm -s dir -t deb --name ${pkg.name} -v ${version} nix bin
     '';
 
